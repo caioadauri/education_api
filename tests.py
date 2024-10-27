@@ -7,7 +7,7 @@ teacher = []
 def test_create_teacher():
   new_teacher_data = {
     "name": "Caio",
-    "age": "30",
+    "age": 30,
     "matter": "Desenvolvimento de APIs",
     "obs": "Desenvolvento APIs"
   }
@@ -24,3 +24,25 @@ def test_get_teachers():
   response_json = response.json()
   assert "teachers" in response_json
   assert "total_teacher" in response_json
+
+def test_get_teacher():
+  if teacher:
+    teacher_id = teacher[0]
+    response = requests.get(f"{BASE_URL}/teacher/{teacher_id}")
+    assert response.status_code == 200
+    response_json = response.json()
+    assert teacher_id == response_json['id']
+
+def test_update_teacher():
+  if teacher:
+    teacher_id = teacher[0]
+    payload = {
+      "name": "João",
+      "age": 28,
+      "matter": "SQL",
+      "obs": "Criando querys"
+    }
+    response = requests.put(f"{BASE_URL}/teacher/{teacher_id}", json=payload)
+    assert response.status_code == 200
+    response_json = response.json()
+    assert "message" in response_json
