@@ -14,7 +14,7 @@ def create_teacher():
   teacher_id_control += 1
   teachers.append(new_teacher)
   print(teachers)
-  return jsonify({'message': 'Professor cadastrado com sucesso!'})
+  return jsonify({'message': 'Professor cadastrado com sucesso!', "id": new_teacher.id})
 
 @app.route('/teacher', methods=['GET'])
 def get_teachers():
