@@ -17,3 +17,10 @@ def test_create_teacher():
   assert "message" in response_json
   assert "id" in response_json
   teacher.append(response_json['id'])
+
+def test_get_teachers():
+  response = requests.get(f"{BASE_URL}/teacher")
+  assert response.status_code == 200
+  response_json = response.json()
+  assert "teachers" in response_json
+  assert "total_teacher" in response_json
