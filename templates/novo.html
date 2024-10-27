@@ -1,0 +1,86 @@
+{% extends "template.html" %}
+{% block conteudo %}
+    <form action="{{ url_for('criar') }}" method="post">
+        <fieldset>
+            <div class="form-group">
+                <label for="tipo">Tipo de Cadastro</label>
+                <select id="tipo" name="tipo" class="form-control">
+                    <option value="">Selecione</option>
+                    <option value="professor">Professor</option>
+                    <option value="aluno">Aluno</option>
+                    <option value="turma">Turma</option>
+                </select>
+            </div>
+
+            <div>
+                <h2>Cadastro de Professor</h2>
+                <div class="form-group">
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" name="nome" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="idade">Idade</label>
+                    <input type="text" id="idade" name="idade" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="materia">Matéria</label>
+                    <input type="text" id="materia" name="materia" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="observacao">Observação</label>
+                    <input type="text" id="observacao" name="observacao" class="form-control">
+                </div>
+            </div>
+
+            <div>
+                <h2>Cadastro de Aluno</h2>
+                <div class="form-group">
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" name="nome" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="idade">Idade</label>
+                    <input type="text" id="idade" name="idade" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="turma">Turma</label>
+                    <input type="text" id="turma" name="turma" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="data_nascimento">Data de Nascimento</label>
+                    <input type="date" id="data_nascimento" name="data_nascimento" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="nota_primeiro_s">Nota Primeiro Semestre</label>
+                    <input type="text" id="nota_primeiro_s" name="nota_primeiro_s" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="nota_segundo_s">Nota Segundo Semestre</label>
+                    <input type="text" id="nota_segundo_s" name="nota_segundo_s" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="media_final">Média Final</label>
+                    <input type="text" id="media_final" name="media_final" class="form-control">
+                </div>
+            </div>
+
+            <div>
+                <h2>Cadastro de Turma</h2>
+                <div class="form-group">
+                    <label for="descricao">Descrição</label>
+                    <input type="text" id="descricao" name="descricao" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="professor">Professor</label>
+                    <input type="text" id="professor" name="professor" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="ativo">Ativo</label>
+                    <input type="checkbox" id="ativo" name="ativo" class="form-control">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-salvar">Salvar</button>
+        </fieldset>
+    </form>
+{% endblock %}
