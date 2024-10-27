@@ -3,17 +3,73 @@ from model.teacher_model import Teacher
 
 app = Flask(__name__)
 
-teacher = []
+teachers = []
 teacher_id_control = 1
 
 @app.route('/teacher', methods=['POST'])
 def create_teacher():
+  global teacher_id_control
   data = request.get_json()
-  new_teacher = Teacher(id=teacher_id_control, name=data.get('name'), age=data.get('age'), matte = data.get('matter'), obs = data.get('obs'))
+  new_teacher = Teacher(id=teacher_id_control, name=data['name'], age=data.get('age'), matter=data.get('matter'), obs=data.get('obs'))
   teacher_id_control += 1
-  teacher.append(new_teacher)
-  print(teacher)
+  teachers.append(new_teacher)
+  print(teachers)
   return jsonify({'message': 'Professor cadastrado com sucesso!'})
+
+@app.route('/teacher', methods=['GET'])
+def get_teachers():
+    teacher_list = [teacher.to_dict() for teacher in teachers]
+    # for teacher in teachers:
+    #    teacher_list.append(teacher.to_dict())
+    output = {
+       "teachers": teacher_list,
+       "total_teacher": len(teacher_list)
+    }
+    return jsonify(output)
+
+@app.route('/teacher/<int:id>', methods=['GET'])
+def get_teacher(id):
+   teacher = None
+   for t in teachers:
+      if t.id == id:
+         return jsonify(t.to_dict())
+   
+   return jsonify({"message": "Professor não encontrado"}), 404
+
+@app.route('/teacher/<int:id>', methods=['PUT'])
+def update_teacher(id):
+   teacher = None
+   for t in teachers:
+      if t.id == id:
+         teacher = t
+         break
+    
+   print(teacher)
+        
+   if teacher == None:
+      return jsonify({"message": "Professor não encontrado"}), 404
+
+   data = request.get_json()
+   teacher.name = data['name']
+   teacher.age = data['age']
+   teacher.matter = data['matter']
+   teacher.obs = data['obs']
+   print(teacher)
+   return jsonify({"message": "Professor atualizado com sucesso"})
+
+@app.route('/teacher/<int:id>', methods=['DELETE'])
+def delete_teacher(id):
+   teacher = None
+   for t in teachers:
+      if t.id == id:
+         teacher = t
+         break
+
+   if teacher == None:
+      return jsonify({"message": "Professor não encontrado"}), 404
+   
+   teachers.remove(teacher)
+   return jsonify({"message": "Professor deletdao com sucesso"})
 
 if __name__ == "__main__":
   app.run(debug=True)
