@@ -1,72 +1,74 @@
 {% extends "template.html" %}
 {% block conteudo %}
-    <h2>Professores</h2>
-    <table class="table table-striped table-responsive table-bordered">
-        <thead class="thead-default">
-            <tr>
-                <th>Nome</th>
-                <th>Idade</th>
-                <th>Matéria</th>
-                <th>Observação</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for professor in professores %}
-            <tr>
-                <td>{{ professor.nome }}</td>
-                <td>{{ professor.idade }}</td>
-                <td>{{ professor.materia }}</td>
-                <td>{{ professor.observacao }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="container mt-5">
+        <h2 class="mb-4">Professores</h2>
+        <table class="table table-striped table-responsive table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Nome</th>
+                    <th>Idade</th>
+                    <th>Matéria</th>
+                    <th>Observação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for professor in professores %}
+                <tr>
+                    <td>{{ professor.nome }}</td>
+                    <td>{{ professor.idade }}</td>
+                    <td>{{ professor.materia }}</td>
+                    <td>{{ professor.observacao }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <h2>Alunos</h2>
-    <table class="table table-striped table-responsive table-bordered">
-        <thead class="thead-default">
-            <tr>
-                <th>Nome</th>
-                <th>Idade</th>
-                <th>Turma</th>
-                <th>Data de Nascimento</th>
-                <th>Nota 1º Semestre</th>
-                <th>Nota 2º Semestre</th>
-                <th>Média Final</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for aluno in alunos %}
-            <tr>
-                <td>{{ aluno.nome }}</td>
-                <td>{{ aluno.idade }}</td>
-                <td>{{ aluno.turma }}</td>
-                <td>{{ aluno.data_nascimento }}</td>
-                <td>{{ aluno.nota_primeiro_s }}</td>
-                <td>{{ aluno.nota_segundo_s }}</td>
-                <td>{{ aluno.media_final }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <h2 class="mt-5 mb-4">Alunos</h2>
+        <table class="table table-striped table-responsive table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Nome</th>
+                    <th>Idade</th>
+                    <th>Turma</th>
+                    <th>Data de Nascimento</th>
+                    <th>Nota 1º Semestre</th>
+                    <th>Nota 2º Semestre</th>
+                    <th>Média Final</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for aluno in alunos %}
+                <tr>
+                    <td>{{ aluno.nome }}</td>
+                    <td>{{ aluno.idade }}</td>
+                    <td>{{ aluno.turma }}</td>
+                    <td>{{ aluno.data_nascimento }}</td>
+                    <td>{{ aluno.nota_primeiro_s }}</td>
+                    <td>{{ aluno.nota_segundo_s }}</td>
+                    <td>{{ aluno.media_final }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <h2>Turmas</h2>
-    <table class="table table-striped table-responsive table-bordered">
-        <thead class="thead-default">
-            <tr>
-                <th>Descrição</th>
-                <th>Professor</th>
-                <th>Ativo</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for turma in turmas %}
-            <tr>
-                <td>{{ turma.descricao }}</td>
-                <td>{{ turma.professor }}</td>
-                <td>{{ turma.ativo }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <h2 class="mt-5 mb-4">Turmas</h2>
+        <table class="table table-striped table-responsive table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Descrição</th>
+                    <th>Professor</th>
+                    <th>Ativo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for turma in turmas %}
+                <tr>
+                    <td>{{ turma.descricao }}</td>
+                    <td>{{ turma.professor }}</td>
+                    <td>{{ turma.ativo }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
