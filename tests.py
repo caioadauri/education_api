@@ -46,3 +46,8 @@ def test_update_teacher():
     assert response.status_code == 200
     response_json = response.json()
     assert "message" in response_json
+
+    response = requests.get(f"{BASE_URL}/teacher/{teacher_id}")
+    assert response.status_code == 200
+    response_json = response.json()
+    assert response_json["name"] == payload["name"]
