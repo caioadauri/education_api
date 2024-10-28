@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify
+from flask_sqlalchemy import SQLAlchemy
 from model.teacher_model import Teacher
 
 app = Flask(__name__)
+db = SQLAlchemy(app)
 
 teachers = []
 teacher_id_control = 1
