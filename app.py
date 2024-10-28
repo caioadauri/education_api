@@ -1,14 +1,40 @@
 from flask import Flask, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from model.teacher_model import Teacher
+from model.user import User
+from model.teacher import Teacher
+from database import db
+from flask_login import LoginManager
 
 app = Flask(__name__)
-db = SQLAlchemy(app)
+app.config['SECRET_KEY'] = "education"
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = \
+#          '{SGBD}://{user}:{password}@{server}:{port}/{database}'.format(
+#              SGBD = 'mysql+mysqlconnector',
+#              user = 'root',
+#              password = 'education',
+#              server = 'localhost',
+#              port = '3306',
+#              database = 'education'
+#              )
 
-app.config['SECRET_KEY']
+login_manager = LoginManager()
+db.init_app(app)
+login_manager.init_app(app)
+
 
 teachers = []
 teacher_id_control = 1
+
+@app.route('/login', methods=['POST'])
+def login():
+   data = request.json()
+   username = data.get('username')
+   password = data.get('password')
+
+   if username and password:
+      pass
+
+      return jsonify({'message': 'Credenciais inválidas'}), 400
 
 @app.route('/teacher', methods=['POST'])
 def create_teacher():
