@@ -5,6 +5,8 @@ from model.teacher_model import Teacher
 app = Flask(__name__)
 db = SQLAlchemy(app)
 
+app.config['SECRET_KEY']
+
 teachers = []
 teacher_id_control = 1
 
