@@ -1,19 +1,28 @@
-class Teacher:
-  def __init__(self, id, name, age, matter, obs) -> None:
-    self.id = id
-    self.name = name
-    self.age = age
-    self.matter = matter
-    self.obs = obs
+from database import db
 
-  def to_dict(self):
-    return {
-      "id": self.id,
-      "name": self.name,
-      "age": self.age,
-      "matter": self.matter,
-      "obs": self.obs
-      }
+# class Teacher:
+#   def __init__(self, id, name, age, matter, obs) -> None:
+#     self.id = id
+#     self.name = name
+#     self.age = age
+#     self.matter = matter
+#     self.obs = obs
+
+#   def to_dict(self):
+#     return {
+#       "id": self.id,
+#       "name": self.name,
+#       "age": self.age,
+#       "matter": self.matter,
+#       "obs": self.obs
+#       }
+  
+class Teacher(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(150), nullable=False)
+    age = db.Column(db.Integer, nullable=False)
+    matter = db.Column(db.String(150), nullable=False)
+    obs = db.Column(db.String(150), nullable=False)
     
 
 # class Professores(db.Model):

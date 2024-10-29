@@ -6,7 +6,7 @@ from flask_login import LoginManager, login_user, current_user, logout_user, log
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "education"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:education@localhost:3306/education-api'
 # app.config['SQLALCHEMY_DATABASE_URI'] = \
 #          '{SGBD}://{user}:{password}@{server}:{port}/{database}'.format(
 #              SGBD = 'mysql+mysqlconnector',
@@ -24,8 +24,8 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 
-teachers = []
-teacher_id_control = 1
+with app.app_context():
+    db.create_all()
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -110,13 +110,25 @@ def delete_user(id_user):
 @app.route('/teacher', methods=['POST'])
 @login_required
 def create_teacher():
-  global teacher_id_control
   data = request.get_json()
-  new_teacher = Teacher(id=teacher_id_control, name=data['name'], age=data.get('age'), matter=data.get('matter'), obs=data.get('obs'))
-  teacher_id_control += 1
-  teachers.append(new_teacher)
-  print(teachers)
-  return jsonify({'message': 'Professor cadastrado com sucesso!', "id": new_teacher.id})
+  name = data.get('name')
+  age = data.get('age')
+  matter = data.get('matter')
+  obs = data.get('obs')
+
+  if name:
+     teacher = Teacher(name=name, age=age, matter=matter, obs=obs)
+     db.session.add(teacher)
+     db.session.commit()
+     return jsonify({'message':"Professor cadastrado com sucesso!"})
+   
+  return jsonify({'message': "Erro ao cadastrar professor!"}), 400
+
+#   new_teacher = Teacher(id=teacher_id_control, name=data['name'], age=data.get('age'), matter=data.get('matter'), obs=data.get('obs'))
+#   teacher_id_control += 1
+#   teachers.append(new_teacher)
+#   print(teachers)
+#   return jsonify({'message': 'Professor cadastrado com sucesso!', "id": new_teacher.id})
 
 @app.route('/teacher', methods=['GET'])
 @login_required
