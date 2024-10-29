@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from model.user import User
 from model.teacher import Teacher
 from database import db
-from flask_login import LoginManager
+from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "education"
@@ -21,22 +21,41 @@ login_manager = LoginManager()
 db.init_app(app)
 login_manager.init_app(app)
 
+login_manager.login_view = 'login'
+
 
 teachers = []
 teacher_id_control = 1
 
+@login_manager.user_loader
+def load_user(user_id):
+   return User.query.get(user_id)
+
 @app.route('/login', methods=['POST'])
 def login():
-   data = request.json()
+   data = request.json
    username = data.get('username')
    password = data.get('password')
 
    if username and password:
-      pass
+      
+      user = User.query.filter_by(username=username).first()
 
-      return jsonify({'message': 'Credenciais inválidas'}), 400
+      if user and user.password == password:
+          login_user(user)
+          print(current_user.is_authenticated)
+          return jsonify({'message': 'Login realizado com sucesso!'})
+
+   return jsonify({'message': 'Credenciais inválidas'}), 400
+
+@app.route('/logout', methods=['POST'])
+@login_required
+def logout():
+   logout_user()
+   return jsonify({'message': 'Logout realizado com sucesso!'})
 
 @app.route('/teacher', methods=['POST'])
+@login_required
 def create_teacher():
   global teacher_id_control
   data = request.get_json()
@@ -47,6 +66,7 @@ def create_teacher():
   return jsonify({'message': 'Professor cadastrado com sucesso!', "id": new_teacher.id})
 
 @app.route('/teacher', methods=['GET'])
+@login_required
 def get_teachers():
     teacher_list = [teacher.to_dict() for teacher in teachers]
     # for teacher in teachers:
@@ -58,6 +78,7 @@ def get_teachers():
     return jsonify(output)
 
 @app.route('/teacher/<int:id>', methods=['GET'])
+@login_required
 def get_teacher(id):
    teacher = None
    for t in teachers:
@@ -67,6 +88,7 @@ def get_teacher(id):
    return jsonify({"message": "Professor não encontrado"}), 404
 
 @app.route('/teacher/<int:id>', methods=['PUT'])
+@login_required
 def update_teacher(id):
    teacher = None
    for t in teachers:
@@ -88,6 +110,7 @@ def update_teacher(id):
    return jsonify({"message": "Professor atualizado com sucesso"})
 
 @app.route('/teacher/<int:id>', methods=['DELETE'])
+@login_required
 def delete_teacher(id):
    teacher = None
    for t in teachers:
