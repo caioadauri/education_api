@@ -54,6 +54,21 @@ def logout():
    logout_user()
    return jsonify({'message': 'Logout realizado com sucesso!'})
 
+@app.route('/user', methods=['POST'])
+def create_user():
+   data = request.json
+   name = data.get('name')
+   username = data.get('username')
+   password = data.get('password')
+
+   if username and password:
+      user = User(name=name, username=username, password=password)
+      db.session.add(user)
+      db.session.commit()
+      return jsonify({'message': "Usuário cadastrado com sucesso!"})
+   
+   return jsonify({'message': "Credenciais inválidas"}), 400
+
 @app.route('/teacher', methods=['POST'])
 @login_required
 def create_teacher():
