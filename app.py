@@ -69,6 +69,44 @@ def create_user():
    
    return jsonify({'message': "Credenciais inválidas"}), 400
 
+@app.route('/user/<int:id_user>', methods=['GET'])
+@login_required
+def read_user(id_user):
+   user = User.query.get(id_user)
+
+   if user:
+      return {'name': user.name, 'username': user.username}
+   return jsonify({'message': "Usuário não encontrado"}), 404
+
+@app.route('/user/<int:id_user>', methods=['PUT'])
+@login_required
+def update_user(id_user):
+   data = request.json
+   user = User.query.get(id_user)
+
+   if user and data.get('password'):
+      user.name = data.get('name')
+      user.password = data.get('password')
+      db.session.commit()
+
+      return jsonify({'message': f"Usuário {user.username} atualizado com sucesso!"})
+   
+   return jsonify({'message: "Usuário não encontrado'}), 404
+
+@app.route('/user/<int:id_user>', methods=['DELETE'])
+@login_required
+def delete_user(id_user):
+   user = User.query.get(id_user)
+
+   if id_user == current_user.id:
+      return jsonify({'message': "Deleção não permitida"}), 403
+   if user:
+      db.session.delete(user)
+      db.session.commit()
+      return jsonify({'message': "Usuário deletado com sucesso!"})
+   
+   return jsonify({'message': "Usuário não encontrado"}), 404
+
 @app.route('/teacher', methods=['POST'])
 @login_required
 def create_teacher():
