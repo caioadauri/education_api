@@ -9,17 +9,6 @@ from flask_login import LoginManager, login_user, current_user, logout_user, log
 
 app = Flask(__name__)
 app.config.from_object(Config)
-# app.config['SECRET_KEY'] = "education"
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:education@localhost:3306/education-api'
-# app.config['SQLALCHEMY_DATABASE_URI'] = \
-#          '{SGBD}://{user}:{password}@{server}:{port}/{database}'.format(
-#              SGBD = 'mysql+mysqlconnector',
-#              user = 'root',
-#              password = 'education',
-#              server = 'localhost',
-#              port = '3306',
-#              database = 'education'
-#              )
 
 login_manager = LoginManager()
 db.init_app(app)
