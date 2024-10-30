@@ -1,5 +1,5 @@
 from flask_login import current_user, login_required
-from flask import Flask, Blueprint, request, jsonify, render_template
+from flask import Flask, Blueprint, request, jsonify, render_template, flash, redirect, url_for
 from model.teacher import Teacher
 from database import db
 
@@ -71,17 +71,34 @@ def delete_teacher(id):
 
    return jsonify({"message": "Professor não encontrado"}), 404
 
-# class Professores:
-#     def __init__(self,nome,idade,materia,observacao):
-#         self.nome=nome #string
-#         self.idade=idade #int
-#         self.materia=materia #string
-#         self.observacao=observacao #string
+@teacher_blueprint.route('/')
+def index():
+    lista_professores = Teacher.query.order_by(Teacher.id).all()
+    return render_template('lista.html',
+                           titulo='Cadastro de Professores, Alunos e Turmas',
+                           teachers=lista_professores,)
 
-# def cadastra_professor():
-#     professor_1 = Professores('Jucelino Rodrigues Bastos', 33, 'Programação Orientada a Objetos', 'Formado em Ciência da Computação')
-#     professor_2 = Professores('Macia Herculina Costa', 38, 'SQL', 'Pós graudada em Big Data')
-#     professor_3 = Professores('André Silva Santos', 27, 'Kotlin', 'Desenvolvedor Mobile' )
-#     professor_4 = Professores('Alexandre José Martins', 36,'Lógica de Programação', 'Formado em Banco de Dados')
-#     lista_professores = [professor_1,professor_2,professor_3,professor_4]
-#     return render_template()
+@teacher_blueprint.route('/cadastro')
+def cadastro():
+    return render_template('novo.html', titulo='Cadastro')
+
+@teacher_blueprint.route('/criar', methods=['POST',])
+def criar():
+    tipo = request.form['tipo']
+    if tipo == 'professor':
+        name = request.form['nome']
+        age = request.form['idade']
+        matter = request.form['materia']
+        obs = request.form['observacao']
+        
+        professor = Teacher.query.filter_by(name=name).first()
+
+        if professor:
+            flash('Este professor ja esta cadastrado.')
+            return redirect(url_for('index'))
+        
+        novo_professor = Teacher(name=name, age=age, matter=matter, obs=obs)
+        db.session.add(novo_professor)
+        db.session.commit()
+    
+    return redirect(url_for('teacher.index'))

@@ -32,5 +32,5 @@ class Teacher(db.Model):
 #     materia = db.Column(db.String(100), nullable=False)
 #     observacao = db.Column(db.String(100), nullable=False)
 
-#     def __repr__(self):
-#         return '<Name %r>' % self.name
+    # def __repr__(self):
+    #     return '<Name %r>' % self.name

@@ -1,3 +1,4 @@
+<!-- Corrigido para alert-success -->
 <!DOCTYPE html>
 <html>
     <head>
@@ -8,12 +9,11 @@
     </head>
     <body>
         <div class="container">
-
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
-                    <ul id="messages" class="'list-unstyled">
+                    <ul id="messages" class="list-unstyled">
                         {% for message in messages %}
-                            <li class="alert alert-sucess">{{ message }}</li>
+                            <li class="alert alert-success">{{ message }}</li>
                         {% endfor %}
                     </ul>
                 {% endif %}
@@ -23,8 +23,7 @@
                 <h1>{{ titulo }}</h1>
             </div>
 
-                {% block conteudo%} {% endblock %}
-            
+            {% block conteudo %}{% endblock %}
         </div>
     </body>
 </html>

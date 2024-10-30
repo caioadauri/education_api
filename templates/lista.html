@@ -11,12 +11,12 @@
             </tr>
         </thead>
         <tbody>
-            {% for professor in professores %}
+            {% for teacher in teachers %}
             <tr>
-                <td>{{ professor.nome }}</td>
-                <td>{{ professor.idade }}</td>
-                <td>{{ professor.materia }}</td>
-                <td>{{ professor.observacao }}</td>
+                <td>{{ teacher.name }}</td>
+                <td>{{ teacher.age }}</td>
+                <td>{{ teacher.matter }}</td>
+                <td>{{ teacher.obs }}</td>
             </tr>
             {% endfor %}
         </tbody>
