@@ -7,6 +7,7 @@ from model.teacher import Teacher
 from model.student import Student
 from model.class_room import Class_room
 from controller.user import user_blueprint
+from controller.teacher import teacher_blueprint
 
 
 def create_app():
@@ -15,6 +16,7 @@ def create_app():
    db.init_app(app)
 
    app.register_blueprint(user_blueprint)
+   app.register_blueprint(teacher_blueprint)
 
    
 
@@ -59,72 +61,7 @@ def logout():
    logout_user()
    return jsonify({'message': 'Logout realizado com sucesso!'})
 
-@app.route('/teacher', methods=['POST'])
-@login_required
-def create_teacher():
-  data = request.get_json()
-  name = data.get('name')
-  age = data.get('age')
-  matter = data.get('matter')
-  obs = data.get('obs')
 
-  if name:
-     teacher = Teacher(name=name, age=age, matter=matter, obs=obs)
-     db.session.add(teacher)
-     db.session.commit()
-     return jsonify({'message':"Professor cadastrado com sucesso!"})
-   
-  return jsonify({'message': "Erro ao cadastrar professor!"}), 400
-
-@app.route('/teacher', methods=['GET'])
-@login_required
-def get_teachers():
-    teachers = Teacher.query.all()
-   
-    if teachers:
-       result = [{'name': teacher.name, 'age': teacher.age, 'matter': teacher.matter, 'obs': teacher.obs} for teacher in teachers]
-       return jsonify(result)
-    
-    return jsonify({'message': "Nenhum Professor cadastrado"}), 400
-
-
-@app.route('/teacher/<int:id>', methods=['GET'])
-@login_required
-def get_teacher(id):
-   teacher = Teacher.query.get(id)
-   
-   if teacher:
-      return jsonify({'name': teacher.name, 'age': teacher.age, 'matter': teacher.matter, 'obs': teacher.obs})
-   return jsonify({'message': "Nenhum Professor encontrado"}), 400
-
-@app.route('/teacher/<int:id>', methods=['PUT'])
-@login_required
-def update_teacher(id):
-   data = request.json
-   teacher = Teacher.query.get(id)
-
-   if teacher:
-      teacher.name = data.get('name')
-      teacher.age = data.get('age')
-      teacher.matter = data.get('matter')
-      teacher.obs = data.get('obs')
-      db.session.commit()
-
-      return jsonify({'message': "Professor atualizado com sucesso!"})
-   
-   return jsonify({'message': "Professor não encontrato"}), 404
-
-@app.route('/teacher/<int:id>', methods=['DELETE'])
-@login_required
-def delete_teacher(id):
-   teacher = Teacher.query.get(id)
-
-   if teacher:
-      db.session.delete(teacher)
-      db.session.commit()
-      return jsonify({"message": "Professor deletdao com sucesso"})
-
-   return jsonify({"message": "Professor não encontrado"}), 404
 
 if __name__ == "__main__":
   app.run(debug=True)
