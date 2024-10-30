@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from config import Config
 from model.user import User
 from model.teacher import Teacher
 from model.student import Student
@@ -7,8 +8,9 @@ from database import db
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = "education"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:education@localhost:3306/education-api'
+app.config.from_object(Config)
+# app.config['SECRET_KEY'] = "education"
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:education@localhost:3306/education-api'
 # app.config['SQLALCHEMY_DATABASE_URI'] = \
 #          '{SGBD}://{user}:{password}@{server}:{port}/{database}'.format(
 #              SGBD = 'mysql+mysqlconnector',
