@@ -148,39 +148,31 @@ def get_teacher(id):
 @app.route('/teacher/<int:id>', methods=['PUT'])
 @login_required
 def update_teacher(id):
-   teacher = None
-   for t in teachers:
-      if t.id == id:
-         teacher = t
-         break
-    
-   print(teacher)
-        
-   if teacher == None:
-      return jsonify({"message": "Professor não encontrado"}), 404
+   data = request.json
+   teacher = Teacher.query.get(id)
 
-   data = request.get_json()
-   teacher.name = data['name']
-   teacher.age = data['age']
-   teacher.matter = data['matter']
-   teacher.obs = data['obs']
-   print(teacher)
-   return jsonify({"message": "Professor atualizado com sucesso"})
+   if teacher:
+      teacher.name = data.get('name')
+      teacher.age = data.get('age')
+      teacher.matter = data.get('matter')
+      teacher.obs = data.get('obs')
+      db.session.commit()
+
+      return jsonify({'message': "Professor atualizado com sucesso!"})
+   
+   return jsonify({'message': "Professor não encontrato"}), 404
 
 @app.route('/teacher/<int:id>', methods=['DELETE'])
 @login_required
 def delete_teacher(id):
-   teacher = None
-   for t in teachers:
-      if t.id == id:
-         teacher = t
-         break
+   teacher = Teacher.query.get(id)
 
-   if teacher == None:
-      return jsonify({"message": "Professor não encontrado"}), 404
-   
-   teachers.remove(teacher)
-   return jsonify({"message": "Professor deletdao com sucesso"})
+   if teacher:
+      db.session.delete(teacher)
+      db.session.commit()
+      return jsonify({"message": "Professor deletdao com sucesso"})
+
+   return jsonify({"message": "Professor não encontrado"}), 404
 
 if __name__ == "__main__":
   app.run(debug=True)
