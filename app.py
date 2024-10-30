@@ -124,33 +124,26 @@ def create_teacher():
    
   return jsonify({'message': "Erro ao cadastrar professor!"}), 400
 
-#   new_teacher = Teacher(id=teacher_id_control, name=data['name'], age=data.get('age'), matter=data.get('matter'), obs=data.get('obs'))
-#   teacher_id_control += 1
-#   teachers.append(new_teacher)
-#   print(teachers)
-#   return jsonify({'message': 'Professor cadastrado com sucesso!', "id": new_teacher.id})
-
 @app.route('/teacher', methods=['GET'])
 @login_required
 def get_teachers():
-    teacher_list = [teacher.to_dict() for teacher in teachers]
-    # for teacher in teachers:
-    #    teacher_list.append(teacher.to_dict())
-    output = {
-       "teachers": teacher_list,
-       "total_teacher": len(teacher_list)
-    }
-    return jsonify(output)
+    teachers = Teacher.query.all()
+   
+    if teachers:
+       result = [{'name': teacher.name, 'age': teacher.age, 'matter': teacher.matter, 'obs': teacher.obs} for teacher in teachers]
+       return jsonify(result)
+    
+    return jsonify({'message': "Nenhum Professor cadastrado"}), 400
+
 
 @app.route('/teacher/<int:id>', methods=['GET'])
 @login_required
 def get_teacher(id):
-   teacher = None
-   for t in teachers:
-      if t.id == id:
-         return jsonify(t.to_dict())
+   teacher = Teacher.query.get(id)
    
-   return jsonify({"message": "Professor não encontrado"}), 404
+   if teacher:
+      return jsonify({'name': teacher.name, 'age': teacher.age, 'matter': teacher.matter, 'obs': teacher.obs})
+   return jsonify({'message': "Nenhum Professor encontrado"}), 400
 
 @app.route('/teacher/<int:id>', methods=['PUT'])
 @login_required
