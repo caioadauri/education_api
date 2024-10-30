@@ -1,24 +1,36 @@
 from flask import Flask, request, jsonify
+from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 from config import Config
+from database import db
 from model.user import User
 from model.teacher import Teacher
 from model.student import Student
 from model.class_room import Class_room
-from database import db
-from flask_login import LoginManager, login_user, current_user, logout_user, login_required
+from controller.user import user_blueprint
 
-app = Flask(__name__)
-app.config.from_object(Config)
+
+def create_app():
+   app = Flask(__name__)
+   app.config.from_object(Config)
+   db.init_app(app)
+
+   app.register_blueprint(user_blueprint)
+
+   
+
+   with app.app_context():
+      db.create_all()
+   
+   return app
+
+app = create_app()
 
 login_manager = LoginManager()
-db.init_app(app)
 login_manager.init_app(app)
-
 login_manager.login_view = 'login'
 
 
-with app.app_context():
-    db.create_all()
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -46,59 +58,6 @@ def login():
 def logout():
    logout_user()
    return jsonify({'message': 'Logout realizado com sucesso!'})
-
-@app.route('/user', methods=['POST'])
-def create_user():
-   data = request.json
-   name = data.get('name')
-   username = data.get('username')
-   password = data.get('password')
-
-   if username and password:
-      user = User(name=name, username=username, password=password)
-      db.session.add(user)
-      db.session.commit()
-      return jsonify({'message': "Usuário cadastrado com sucesso!"})
-   
-   return jsonify({'message': "Credenciais inválidas"}), 400
-
-@app.route('/user/<int:id_user>', methods=['GET'])
-@login_required
-def read_user(id_user):
-   user = User.query.get(id_user)
-
-   if user:
-      return {'name': user.name, 'username': user.username}
-   return jsonify({'message': "Usuário não encontrado"}), 404
-
-@app.route('/user/<int:id_user>', methods=['PUT'])
-@login_required
-def update_user(id_user):
-   data = request.json
-   user = User.query.get(id_user)
-
-   if user and data.get('password'):
-      user.name = data.get('name')
-      user.password = data.get('password')
-      db.session.commit()
-
-      return jsonify({'message': f"Usuário {user.username} atualizado com sucesso!"})
-   
-   return jsonify({'message: "Usuário não encontrado'}), 404
-
-@app.route('/user/<int:id_user>', methods=['DELETE'])
-@login_required
-def delete_user(id_user):
-   user = User.query.get(id_user)
-
-   if id_user == current_user.id:
-      return jsonify({'message': "Deleção não permitida"}), 403
-   if user:
-      db.session.delete(user)
-      db.session.commit()
-      return jsonify({'message': "Usuário deletado com sucesso!"})
-   
-   return jsonify({'message': "Usuário não encontrado"}), 404
 
 @app.route('/teacher', methods=['POST'])
 @login_required
