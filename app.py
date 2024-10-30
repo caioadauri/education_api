@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 from model.user import User
 from model.teacher import Teacher
+from model.student import Student
+from model.class_room import Class_room
 from database import db
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 
