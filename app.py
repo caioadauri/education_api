@@ -8,6 +8,7 @@ from model.student import Student
 from model.class_room import Class_room
 from controller.user import user_blueprint
 from controller.teacher import teacher_blueprint
+from controller.student_controller import student_blueprint
 
 
 def create_app():
@@ -17,6 +18,7 @@ def create_app():
 
    app.register_blueprint(user_blueprint)
    app.register_blueprint(teacher_blueprint)
+   app.register_blueprint(student_blueprint)
 
    
 
@@ -64,11 +66,7 @@ def logout():
 
 
 if __name__ == "__main__":
-  app.run(debug=True)
-# from flask import Flask, render_template, request, redirect, session, flash, url_for
-# from flask_sqlalchemy import SQLAlchemy
-# from controller.teacher_controller import Professores  
-# from controller.user_controller import Usuarios
+  app.run(debug=True)  
 # from controller.student_controller import Alunos
 # from controller.class_controller import Turmas
 

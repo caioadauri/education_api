@@ -21,5 +21,5 @@ class Student(db.Model):
 #     media_final = db.Column(db.Float, nullable=False)
 #     turma_id = db.Column(db.Integer, nullable=False)
 
-#     def __repr__(self):
-#         return '<Name %r>' % self.nome
+    # def __repr__(self):
+    #     return '<Name %r>' % self.nome
