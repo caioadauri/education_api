@@ -8,7 +8,7 @@ from model.student import Student
 from model.class_room import Class_room
 from controller.user import user_blueprint
 from controller.teacher import teacher_blueprint
-from controller.student_controller import student_blueprint
+from controller.student import student_blueprint
 
 
 def create_app():

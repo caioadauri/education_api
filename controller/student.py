@@ -29,6 +29,53 @@ def create_student():
    
   return jsonify({'message': "Erro ao cadastrar Aluno!"}), 400
 
+@student_blueprint.route('/student', methods=['GET'])
+@login_required
+def get_students():
+    students = Student.query.all()
+   
+    if students:
+       result = [{'id': student.id, 'name': student.name, 'age': student.age, 'classroom': student.classroom, 
+                  'date_of_birth': student.date_of_birth, 'grade_first_semester': student.grade_first_semester, 
+                  'grade_second_semester': student.grade_second_semester, 'average_final': student.average_final, 
+                  'class_id': student.class_id} for student in students]
+       return jsonify(result)
+    
+    return jsonify({'message': "Nenhum Aluno cadastrado"}), 400
+
+@student_blueprint.route('/student/<int:id>', methods=['GET'])
+@login_required
+def get_teacher(id):
+   student = Student.query.get(id)
+   
+   if student:
+      return jsonify({'name': student.name, 'age': student.age, 'classroom': student.classroom, 
+                  'date_of_birth': student.date_of_birth, 'grade_first_semester': student.grade_first_semester, 
+                  'grade_second_semester': student.grade_second_semester, 'average_final': student.average_final, 
+                  'class_id': student.class_id})
+   return jsonify({'message': "Nenhum Aluno encontrado"}), 400
+
+@student_blueprint.route('/student/<int:id>', methods=['PUT'])
+@login_required
+def update_student(id):
+   data = request.json
+   student = Student.query.get(id)
+
+   if student:
+      student.name = data.get('name')
+      student.age = data.get('age')
+      student.classroom = data.get('classroom')
+      student.date_of_birth = data.get('date_of_birth')
+      student.grade_first_semester = data.get('grade_first_semester')
+      student.grade_second_semester = data.get('grade_second_semester')
+      student.average_final = data.get('average_final')
+      student.class_id = data.get('class_id')
+      db.session.commit()
+
+      return jsonify({'message': "Aluno atualizado com sucesso!"})
+   
+   return jsonify({'message': "Aluno não encontrato"}), 404
+
 # class Alunos:
 #     def __init__(self,nome, idade, turma, data_nascimento, nota_primeiro_s, nota_segundo_s, media_final):
 #         self.nome = nome #string
