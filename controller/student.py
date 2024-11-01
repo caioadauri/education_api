@@ -88,12 +88,40 @@ def delete_student(id):
 
    return jsonify({"message": "Aluno não encontrado"}), 404
 
-@student_blueprint.route('/aluno')
-def index():
-    lista_alunos = Student.query.order_by(Student.id).all()
-    return render_template('student.html',
-                           titulo='Lista de Alunos',
-                           students=lista_alunos,)
+@student_blueprint.route('/alunos', methods=['GET'])
+def show_students():
+   students = Student.query.all()
+   return render_template('students.html', students=students)
+
+@student_blueprint.route('/cadastro')
+def cadastro():
+    return render_template('novo.html', titulo='Cadastro')
+
+
+@student_blueprint.route('/criar', methods=['POST',])
+def criar():
+   tipo = request.form['tipo']
+
+   if tipo == 'aluno':
+        nome = request.form['nome']
+        idade = request.form['idade']
+        turma = request.form['turma']
+        data_nascimento = request.form['data_nascimento']
+        nota_primeiro_semestre = request.form['nota_primeiro_s']
+        nota_segundo_semestre = request.form['nota_segundo_s']
+        media_final = request.form['media_final']
+        
+        aluno = Alunos.query.filter_by(nome=nome).first()
+
+        if aluno:
+            flash('Este aluno ja esta cadastrado.')
+            return redirect(url_for('index'))
+        
+        novo_aluno = Alunos(nome=nome, idade=idade, turma=turma, data_nascimento=data_nascimento, nota_primeiro_semestre=nota_primeiro_semestre, nota_segundo_semestre=nota_segundo_semestre, media_final=media_final)
+
+        db.session.add(novo_aluno)
+        db.session.commit()
+   
 
 # class Alunos:
 #     def __init__(self,nome, idade, turma, data_nascimento, nota_primeiro_s, nota_segundo_s, media_final):

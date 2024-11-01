@@ -1,0 +1,44 @@
+{% extends "template.html" %}
+{% block conteudo %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alunos</title>
+</head>
+<body>
+  <h2>Lista de Alunos</h2>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Idade</th>
+      <th>Turma</th>
+      <th>Data de Nascimento</th>
+      <th>Nota 1º Semestre</th>
+      <th>Nota 2º Semestre</th>
+      <th>Média Final</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for student in students %}
+    <tr>
+      <td>{{ student.id }}</td>
+      <td>{{ student.name }}</td>
+      <td>{{ student.age }}</td>
+      <td>{{ student.classroom }}</td>
+      <td>{{ student.date_of_birth }}</td>
+      <td>{{ student.grade_first_semester }}</td>
+      <td>{{ student.grade_second_semester }}</td>
+      <td>{{ student.average_final }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>  
+</body>
+</html>
+{% endblock %}
