@@ -119,6 +119,29 @@ def new_student():
    return render_template('new_student.html')
 
 
+@student_blueprint.route('/aluno/editar/<int:id>', methods=['GET', 'POST'])
+def edit_student(id):
+   student = Student.query.get(id)
+   if not student:
+      flash("Aluno não encontrado!", "danger")
+      return redirect(url_for('student.show_students'))
+   
+   if request.method == 'POST':
+      student.name = request.form.get('name')
+      student.age = request.form.get('age')
+      student.classroom = request.form.get('classroom')
+      student.date_of_birth = request.form.get('date_of_birth')
+      student.grade_first_semester = request.form.get('grade_first_semester')
+      student.grade_second_semester = request.form.get('grade_second_semester')
+      student.average_final = request.form.get('average_final')
+      student.class_id = request.form.get('class_id')
+      db.session.commit()
+      flash("Aluno atualizado com sucesso!", "success")
+
+      return redirect(url_for('student.show_students'))
+   
+   return render_template('edit_student.html', student=student)
+
 @student_blueprint.route('/cadastro')
 def cadastro():
     return render_template('novo.html', titulo='Cadastro')
