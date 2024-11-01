@@ -84,7 +84,7 @@ def delete_student(id):
    if student:
       db.session.delete(student)
       db.session.commit()
-      return jsonify({"message": "Aluno deletdao com sucesso"})
+      return jsonify({"message": "Aluno deletdo com sucesso"})
 
    return jsonify({"message": "Aluno não encontrado"}), 404
 

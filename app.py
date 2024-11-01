@@ -9,6 +9,7 @@ from model.class_room import Class_room
 from controller.user import user_blueprint
 from controller.teacher import teacher_blueprint
 from controller.student import student_blueprint
+from controller.class_room import class_blueprint
 
 
 def create_app():
@@ -19,6 +20,7 @@ def create_app():
    app.register_blueprint(user_blueprint)
    app.register_blueprint(teacher_blueprint)
    app.register_blueprint(student_blueprint)
+   app.register_blueprint(class_blueprint)
 
    
 
