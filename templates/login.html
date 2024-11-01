@@ -1,7 +1,7 @@
 {% extends "template.html" %}
 {% block conteudo %}
 <h2>Login</h2>
-<form action="{{ url_for('login') }}" method="POST">
+<form action="{{ url_for('entrar') }}" method="POST">
     <div class="form-group">
         <label for="username">Usuário:</label>
         <input type="text" id="username" name="username" class="form-control" required>

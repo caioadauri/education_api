@@ -64,7 +64,7 @@ def logout():
    return jsonify({'message': 'Logout realizado com sucesso!'})
 
 @app.route('/entrar', methods=['GET', 'POST'])
-def login():
+def entrar():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
@@ -74,19 +74,24 @@ def login():
             if user and user.password == password:
                 login_user(user)
                 flash('Login realizado com sucesso!', 'success')
-                return redirect(url_for('show_users'))
+                return redirect(url_for('home'))
 
         flash('Credenciais inválidas', 'danger')
-        return redirect(url_for('login'))
+        return redirect(url_for('entrar'))
 
     return render_template('login.html')
 
 @app.route('/sair', methods=['GET', 'POST'])
 @login_required
-def logout():
+def sair():
     logout_user()
     flash('Logout realizado com sucesso!', 'success')
-    return redirect(url_for('login'))
+    return redirect(url_for('entrar'))
+
+@app.route('/home', methods=['GET'])
+@login_required
+def home():
+    return render_template('home.html')
 
 
 

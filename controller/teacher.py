@@ -72,6 +72,7 @@ def delete_teacher(id):
    return jsonify({"message": "Professor não encontrado"}), 404
 
 @teacher_blueprint.route('/professor')
+@login_required
 def index():
     lista_professores = Teacher.query.order_by(Teacher.id).all()
     return render_template('teacher.html',
