@@ -5,8 +5,9 @@
 
 <!-- Botões de ação -->
 <div class="mt-4">
+    <a href="{{ url_for('teacher.index') }}" class="btn btn-primary">Professores</a>
+    <a href="{{ url_for('student.show_students') }}" class="btn btn-primary">Alunos</a>
+    <a href="{{ url_for('user.show_users') }}" class="btn btn-primary">Usuários</a>
     <a href="{{ url_for('sair') }}" class="btn btn-danger">Sair</a>
-    <a href="{{ url_for('teacher.index') }}" class="btn btn-primary">Listar Professores</a>
-    <a href="{{ url_for('students') }}" class="btn btn-primary">Listar Alunos</a>
 </div>
 {% endblock %}
