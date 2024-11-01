@@ -38,7 +38,13 @@
         <td>{{ student.grade_first_semester }}</td>
         <td>{{ student.grade_second_semester }}</td>
         <td>{{ student.average_final }}</td>
-        <td><a href="{{ url_for('student.edit_student', id=student.id) }}" class="btn btn-warning">Editar</a></td>
+        <td>
+          <a href="{{ url_for('student.edit_student', id=student.id) }}" class="btn btn-warning">Editar</a>
+          <form action="{{ url_for('student.delete_student_html', id=student.id) }}" method="POST"
+            style="display:inline;">
+            <button type="submit" class="btn btn-danger">Deletar</button>
+          </form>
+        </td>
       </tr>
       {% endfor %}
     </tbody>

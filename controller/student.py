@@ -142,6 +142,18 @@ def edit_student(id):
    
    return render_template('edit_student.html', student=student)
 
+@student_blueprint.route('/student/delete/<int:id>', methods=['POST'])
+def delete_student_html(id):
+   student = Student.query.get(id)
+   if student:
+      db.session.delete(student)
+      db.session.commit()
+      flash("Aluno deletado com sucesso!", "success")
+   else:
+      flash("Aluno não encontrado!", "danger")
+  
+   return redirect(url_for('student.show_students'))
+
 @student_blueprint.route('/cadastro')
 def cadastro():
     return render_template('novo.html', titulo='Cadastro')
