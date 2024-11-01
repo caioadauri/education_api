@@ -76,6 +76,25 @@ def update_student(id):
    
    return jsonify({'message': "Aluno não encontrato"}), 404
 
+@student_blueprint.route('/student/<int:id>', methods=['DELETE'])
+@login_required
+def delete_student(id):
+   student = Student.query.get(id)
+
+   if student:
+      db.session.delete(student)
+      db.session.commit()
+      return jsonify({"message": "Aluno deletdao com sucesso"})
+
+   return jsonify({"message": "Aluno não encontrado"}), 404
+
+@student_blueprint.route('/aluno')
+def index():
+    lista_alunos = Student.query.order_by(Student.id).all()
+    return render_template('student.html',
+                           titulo='Lista de Alunos',
+                           students=lista_alunos,)
+
 # class Alunos:
 #     def __init__(self,nome, idade, turma, data_nascimento, nota_primeiro_s, nota_segundo_s, media_final):
 #         self.nome = nome #string
