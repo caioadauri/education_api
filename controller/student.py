@@ -93,6 +93,32 @@ def show_students():
    students = Student.query.all()
    return render_template('students.html', students=students)
 
+@student_blueprint.route('/aluno/novo', methods=['GET', 'POST'])
+def new_student():
+   if request.method == 'POST':
+      name = request.form.get('name')
+      age = request.form.get('age')
+      classroom = request.form.get('classroom')
+      date_of_birth = request.form.get('date_of_birth')
+      grade_first_semester = request.form.get('grade_first_semester')
+      grade_second_semester = request.form.get('grade_second_semester')
+      average_final = request.form.get('average_final')
+      class_id = request.form.get('class_id')
+
+      if name:
+         student = Student(name=name, age=age, classroom=classroom, date_of_birth=date_of_birth,
+                           grade_first_semester=grade_first_semester, grade_second_semester=grade_second_semester,
+                           average_final=average_final, class_id=class_id)
+         db.session.add(student)
+         db.session.commit()
+         flash("Aluno cadastrado com sucesso!", "success")
+         return redirect(url_for('student.show_students'))
+      else:
+         flash("Erro ao cadastrar Aluno!", "danger")
+
+   return render_template('new_student.html')
+
+
 @student_blueprint.route('/cadastro')
 def cadastro():
     return render_template('novo.html', titulo='Cadastro')
