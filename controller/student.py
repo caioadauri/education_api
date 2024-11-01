@@ -142,7 +142,7 @@ def edit_student(id):
    
    return render_template('edit_student.html', student=student)
 
-@student_blueprint.route('/student/delete/<int:id>', methods=['POST'])
+@student_blueprint.route('/aluno/deletar/<int:id>', methods=['POST'])
 def delete_student_html(id):
    student = Student.query.get(id)
    if student:

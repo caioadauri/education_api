@@ -1,5 +1,5 @@
 from flask_login import current_user, login_required
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, render_template, redirect, url_for, flash
 from database import db
 from model.user import User
 
@@ -58,9 +58,59 @@ def delete_user(id_user):
    
    return jsonify({'message': "Usuário não encontrado"}), 404
 
-# class Usuarios:
-#     def __init__ (self, nome, nickname, senha):
-#         self.nome = nome
-#         self.nickname = nickname
-#         self.senha = senha
+@user_blueprint.route('/usuarios', methods=['GET'])
+def show_users():
+    users = User.query.all()
+    return render_template('users.html', users=users)
+
+@user_blueprint.route('/usuario/novo', methods=['GET', 'POST'])
+def new_user():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        if username and password:
+            user = User(name=name, username=username, password=password)
+            db.session.add(user)
+            db.session.commit()
+            flash("Usuário cadastrado com sucesso!", "success")
+            return redirect(url_for('user.show_users'))
+        else:
+            flash("Credenciais inválidas", "danger")
+
+    return render_template('new_user.html')
+
+@user_blueprint.route('/usuario/editar/<int:id_user>', methods=['GET', 'POST'])
+def edit_user(id_user):
+    user = User.query.get(id_user)
+    if not user:
+        flash("Usuário não encontrado!", "danger")
+        return redirect(url_for('user.show_users'))
+
+    if request.method == 'POST':
+        user.name = request.form.get('name')
+        user.password = request.form.get('password')
+        db.session.commit()
+        flash(f"Usuário {user.username} atualizado com sucesso!", "success")
+        return redirect(url_for('user.show_users'))
+
+    return render_template('edit_user.html', user=user)
+
+@user_blueprint.route('/usuario/deletar/<int:id_user>', methods=['POST'])
+def delete_user_html(id_user):
+    user = User.query.get(id_user)
+
+    if id_user == current_user.id:
+        flash("Deleção não permitida para o próprio usuário", "warning")
+        return redirect(url_for('user.show_users'))
+
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+        flash("Usuário deletado com sucesso!", "success")
+    else:
+        flash("Usuário não encontrado!", "danger")
+
+    return redirect(url_for('user.show_users'))
         
