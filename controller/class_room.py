@@ -60,3 +60,60 @@ def delete_class(id):
       return jsonify({"message": "Turma deletda com sucesso"})
 
    return jsonify({"message": "Turma não encontrada"}), 404
+
+@class_blueprint.route('/turmas', methods=['GET'])
+@login_required
+def show_class():
+    class_rooms = Class_room.query.all()
+    return render_template('turmas.html', class_rooms=class_rooms)
+
+@class_blueprint.route('/turma/nova', methods=['GET', 'POST'])
+@login_required
+def new_class():
+    if request.method == 'POST':
+        description = request.form.get('description')
+        teacher_id = request.form.get('teacher_id')
+        active = request.form.get('active') == 'on'
+
+        if description:
+            class_room = Class_room(description=description, teacher_id=teacher_id, active=active)
+            db.session.add(class_room)
+            db.session.commit()
+            flash("Turma cadastrada com sucesso!", "success")
+            return redirect(url_for('class.show_class'))
+        else:
+            flash("Erro ao cadastrar turma!", "danger")
+
+    return render_template('new_class.html')
+
+@class_blueprint.route('/turma/editar/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_class(id):
+    class_room = Class_room.query.get(id)
+    if not class_room:
+        flash("Turma não encontrada!", "danger")
+        return redirect(url_for('class.show_classes'))
+
+    if request.method == 'POST':
+        class_room.description = request.form.get('description')
+        class_room.teacher_id = request.form.get('teacher_id')
+        class_room.active = request.form.get('active') == 'on'
+        db.session.commit()
+        flash("Turma atualizada com sucesso!", "success")
+        return redirect(url_for('class.show_class'))
+
+    return render_template('edit_class.html', class_room=class_room)
+
+@class_blueprint.route('/turma/deletar/<int:id>', methods=['POST'])
+@login_required
+def delete_class_html(id):
+    class_room = Class_room.query.get(id)
+    if class_room:
+        db.session.delete(class_room)
+        db.session.commit()
+        flash("Turma deletada com sucesso!", "success")
+    else:
+        flash("Turma não encontrada.", "danger")
+    return redirect(url_for('class.show_class'))
+
+

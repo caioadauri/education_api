@@ -1,0 +1,21 @@
+{% extends "template.html" %}
+{% block conteudo %}
+<h2>Editar Turma</h2>
+<form action="{{ url_for('class.edit_class', id=class_room.id) }}" method="POST">
+  <div class="form-group">
+    <label for="description">Descrição:</label>
+    <input type="text" id="description" name="description" class="form-control" value="{{ class_room.description }}"
+      required>
+  </div>
+  <div class="form-group">
+    <label for="teacher_id">ID do Professor:</label>
+    <input type="number" id="teacher_id" name="teacher_id" class="form-control" value="{{ class_room.teacher_id }}"
+      required>
+  </div>
+  <div class="form-group">
+    <label for="active">Ativo:</label>
+    <input type="checkbox" id="active" name="active" {% if class_room.active %}checked{% endif %}>
+  </div>
+  <button type="submit" class="btn btn-primary">Atualizar Turma</button>
+</form>
+{% endblock %}
