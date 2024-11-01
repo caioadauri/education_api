@@ -88,26 +88,68 @@ def delete_student(id):
 
    return jsonify({"message": "Aluno não encontrado"}), 404
 
-@student_blueprint.route('/aluno')
-def index():
-    lista_alunos = Student.query.order_by(Student.id).all()
-    return render_template('student.html',
-                           titulo='Lista de Alunos',
-                           students=lista_alunos,)
+@student_blueprint.route('/alunos', methods=['GET'])
+def show_students():
+   students = Student.query.all()
+   return render_template('students.html', students=students)
 
-# class Alunos:
-#     def __init__(self,nome, idade, turma, data_nascimento, nota_primeiro_s, nota_segundo_s, media_final):
-#         self.nome = nome #string
-#         self.idade = idade #int
-#         self.turma = turma #string
-#         self.data_nascimento = data_nascimento #date
-#         self.nota_primeiro_semestre = nota_primeiro_s #float
-#         self.nota_segundo_semestre = nota_segundo_s #float
-#         self.media_final = media_final #float
+@student_blueprint.route('/aluno/novo', methods=['GET', 'POST'])
+def new_student():
+   if request.method == 'POST':
+      name = request.form.get('name')
+      age = request.form.get('age')
+      classroom = request.form.get('classroom')
+      date_of_birth = request.form.get('date_of_birth')
+      grade_first_semester = request.form.get('grade_first_semester')
+      grade_second_semester = request.form.get('grade_second_semester')
+      average_final = request.form.get('average_final')
+      class_id = request.form.get('class_id')
 
-# def cadastrar_aluno():
-#     aluno_1 = Alunos('Diego Leite dos Passos', 22, 'ADS', '26/03/2002', 8.5, 9.0, 8.75)
-#     aluno_2 = Alunos('Stevenson Lucio Soriano', 21, 'Ciencia da Computação', '15/07/2003', 7.5, 8.0, 7.75)
-#     aluno_3 = Alunos('Marcela Prucho Claudino', 23, 'Engenharia de Software', '12/12/2001', 9.0, 9.5, 9.25)
-#     lista_alunos = [aluno_1, aluno_2, aluno_3]
-#     return render_template()
+      if name:
+         student = Student(name=name, age=age, classroom=classroom, date_of_birth=date_of_birth,
+                           grade_first_semester=grade_first_semester, grade_second_semester=grade_second_semester,
+                           average_final=average_final, class_id=class_id)
+         db.session.add(student)
+         db.session.commit()
+         flash("Aluno cadastrado com sucesso!", "success")
+         return redirect(url_for('student.show_students'))
+      else:
+         flash("Erro ao cadastrar Aluno!", "danger")
+
+   return render_template('new_student.html')
+
+
+@student_blueprint.route('/aluno/editar/<int:id>', methods=['GET', 'POST'])
+def edit_student(id):
+   student = Student.query.get(id)
+   if not student:
+      flash("Aluno não encontrado!", "danger")
+      return redirect(url_for('student.show_students'))
+   
+   if request.method == 'POST':
+      student.name = request.form.get('name')
+      student.age = request.form.get('age')
+      student.classroom = request.form.get('classroom')
+      student.date_of_birth = request.form.get('date_of_birth')
+      student.grade_first_semester = request.form.get('grade_first_semester')
+      student.grade_second_semester = request.form.get('grade_second_semester')
+      student.average_final = request.form.get('average_final')
+      student.class_id = request.form.get('class_id')
+      db.session.commit()
+      flash("Aluno atualizado com sucesso!", "success")
+
+      return redirect(url_for('student.show_students'))
+   
+   return render_template('edit_student.html', student=student)
+
+@student_blueprint.route('/student/delete/<int:id>', methods=['POST'])
+def delete_student_html(id):
+   student = Student.query.get(id)
+   if student:
+      db.session.delete(student)
+      db.session.commit()
+      flash("Aluno deletado com sucesso!", "success")
+   else:
+      flash("Aluno não encontrado!", "danger")
+  
+   return redirect(url_for('student.show_students'))
