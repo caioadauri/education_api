@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 from config import Config
 from database import db
@@ -62,6 +62,31 @@ def login():
 def logout():
    logout_user()
    return jsonify({'message': 'Logout realizado com sucesso!'})
+
+@app.route('/entrar', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        if username and password:
+            user = User.query.filter_by(username=username).first()
+            if user and user.password == password:
+                login_user(user)
+                flash('Login realizado com sucesso!', 'success')
+                return redirect(url_for('show_users'))
+
+        flash('Credenciais inválidas', 'danger')
+        return redirect(url_for('login'))
+
+    return render_template('login.html')
+
+@app.route('/sair', methods=['GET', 'POST'])
+@login_required
+def logout():
+    logout_user()
+    flash('Logout realizado com sucesso!', 'success')
+    return redirect(url_for('login'))
 
 
 
