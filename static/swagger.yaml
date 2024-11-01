@@ -1,0 +1,474 @@
+openapi: 3.0.0
+info:
+  title: Education API
+  version: 1.0.0
+  description: Documentação da API para operações de login, gerenciamento de usuários e professores.
+
+paths:
+  /login:
+    post:
+      summary: Login de usuário
+      description: Autentica um usuário na aplicação.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "usuario123"
+                password:
+                  type: string
+                  example: "senha123"
+      responses:
+        200:
+          description: Login realizado com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Login realizado com sucesso!"
+        400:
+          description: Credenciais inválidas.
+
+  /logout:
+    post:
+      summary: Logout de usuário
+      description: Realiza logout do usuário autenticado.
+      responses:
+        200:
+          description: Logout realizado com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Logout realizado com sucesso!"
+
+  /user:
+    post:
+      summary: Criação de usuário
+      description: Cadastra um novo usuário.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "João Silva"
+                username:
+                  type: string
+                  example: "joaosilva"
+                password:
+                  type: string
+                  example: "senha123"
+      responses:
+        200:
+          description: Usuário cadastrado com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Usuário cadastrado com sucesso!"
+        400:
+          description: Credenciais inválidas.
+
+  /user/{id_user}:
+    get:
+      summary: Consulta de usuário
+      description: Obtém informações do usuário pelo ID.
+      parameters:
+        - name: id_user
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Usuário encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  username:
+                    type: string
+        404:
+          description: Usuário não encontrado.
+
+    put:
+      summary: Atualização de usuário
+      description: Atualiza as informações de um usuário existente.
+      parameters:
+        - name: id_user
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "João Atualizado"
+                password:
+                  type: string
+                  example: "novaSenha123"
+      responses:
+        200:
+          description: Usuário atualizado com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Usuário atualizado com sucesso!"
+        404:
+          description: Usuário não encontrado.
+
+    delete:
+      summary: Deleção de usuário
+      description: Remove um usuário pelo ID.
+      parameters:
+        - name: id_user
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Usuário deletado com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Usuário deletado com sucesso!"
+        403:
+          description: Deleção não permitida.
+        404:
+          description: Usuário não encontrado.
+
+  /teacher:
+    post:
+      summary: Criação de professor
+      description: Cadastra um novo professor.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Maria Silva"
+                age:
+                  type: integer
+                  example: 35
+                matter:
+                  type: string
+                  example: "Matemática"
+                obs:
+                  type: string
+                  example: "Especialista em álgebra."
+      responses:
+        200:
+          description: Professor cadastrado com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Professor cadastrado com sucesso!"
+        400:
+          description: Erro ao cadastrar professor.
+
+    get:
+      summary: Listagem de professores
+      description: Retorna uma lista com todos os professores cadastrados.
+      responses:
+        200:
+          description: Lista de professores.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    age:
+                      type: integer
+                    matter:
+                      type: string
+                    obs:
+                      type: string
+        400:
+          description: Nenhum professor cadastrado.
+
+  /teacher/{id}:
+    get:
+      summary: Consulta de professor
+      description: Obtém informações de um professor pelo ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Professor encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  age:
+                    type: integer
+                  matter:
+                    type: string
+                  obs:
+                    type: string
+        400:
+          description: Nenhum professor encontrado.
+
+    put:
+      summary: Atualização de professor
+      description: Atualiza as informações de um professor existente.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Carlos Santos"
+                age:
+                  type: integer
+                  example: 40
+                matter:
+                  type: string
+                  example: "Física"
+                obs:
+                  type: string
+                  example: "Especialista em mecânica."
+      responses:
+        200:
+          description: Professor atualizado com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Professor atualizado com sucesso!"
+        404:
+          description: Professor não encontrado.
+
+    delete:
+      summary: Deleção de professor
+      description: Remove um professor pelo ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Professor deletado com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Professor deletado com sucesso"
+        404:
+          description: Professor não encontrado.
+  /student:
+    post:
+      summary: Criação de um novo Aluno
+      description: Endpoint para cadastrar um novo aluno.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                age:
+                  type: integer
+                classroom:
+                  type: string
+                date_of_birth:
+                  type: string
+                  format: date
+                grade_first_semester:
+                  type: number
+                  format: float
+                grade_second_semester:
+                  type: number
+                  format: float
+                average_final:
+                  type: number
+                  format: float
+                class_id:
+                  type: integer
+      responses:
+        200:
+          description: Aluno cadastrado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Aluno cadastrado com sucesso!
+        400:
+          description: Erro ao cadastrar Aluno
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Erro ao cadastrar Aluno!
+    get:
+      summary: Listagem de todos os Alunos
+      description: Endpoint para obter a lista de todos os alunos cadastrados.
+      responses:
+        200:
+          description: Lista de alunos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    age:
+                      type: integer
+                    classroom:
+                      type: string
+                    date_of_birth:
+                      type: string
+                      format: date
+                    grade_first_semester:
+                      type: number
+                      format: float
+                    grade_second_semester:
+                      type: number
+                      format: float
+                    average_final:
+                      type: number
+                      format: float
+                    class_id:
+                      type: integer
+        400:
+          description: Nenhum Aluno cadastrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Nenhum Aluno cadastrado
+
+  /student/{id}:
+    get:
+      summary: Consulta de professor
+      description: Endpoint para obter detalhes de um aluno específico pelo ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Detalhes do aluno
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  age:
+                    type: integer
+                  classroom:
+                    type: string
+                  date_of_birth:
+                    type: string
+                    format: date
+                  grade_first_semester:
+                    type: number
+                    format: float
+                  grade_second_semester:
+                    type: number
+                    format: float
+                  average_final:
+                    type: number
+                    format: float
+                  class_id:
+                    type: integer
+        400:
+          description: Aluno não encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Nenhum Aluno encontrado
