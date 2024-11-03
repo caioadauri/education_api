@@ -1,8 +1,9 @@
-app.config['SQLALCHEMY_DATABASE_URI'] = \
-        '{SGBD}://{usuario}:{senha}@{servidor}/{database}'.format(
-            SGBD = 'mysql+mysqlconnector',
-            usuario = 'root',
-            senha = 'Pe09111998*',
-            servidor = 'localhost',
-            database = 'db_faculdade'
-)
+connector = "mysql+pymysql"
+user = "root"
+password = "education"
+server = "localhost"
+port = "3306"
+database = "education-api"
+class Config:
+  SECRET_KEY = "education"
+  SQLALCHEMY_DATABASE_URI = f'{connector}://{user}:{password}@{server}:{port}/{database}'
