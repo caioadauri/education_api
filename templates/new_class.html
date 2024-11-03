@@ -6,14 +6,22 @@
     <label for="description">Descrição:</label>
     <input type="text" id="description" name="description" class="form-control" required>
   </div>
+
   <div class="form-group">
-    <label for="teacher_id">ID do Professor:</label>
-    <input type="number" id="teacher_id" name="teacher_id" class="form-control" required>
+    <label for="teacher_id">Professor:</label>
+    <select id="teacher_id" name="teacher_id" class="form-control" required>
+      <option value="">Selecione o Professor</option>
+      {% for teacher in teachers %}
+      <option value="{{ teacher.id }}">{{ teacher.name }}</option>
+      {% endfor %}
+    </select>
   </div>
+
   <div class="form-group">
     <label for="active">Ativo:</label>
     <input type="checkbox" id="active" name="active">
   </div>
+
   <button type="submit" class="btn btn-primary">Cadastrar Turma</button>
 </form>
 {% endblock %}

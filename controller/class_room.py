@@ -2,6 +2,7 @@ from flask import Flask, render_template
 from flask_login import current_user, login_required
 from flask import Flask, Blueprint, request, jsonify, render_template, flash, redirect, url_for
 from model.class_room import Class_room
+from model.teacher import Teacher
 from database import db
 
 class_blueprint = Blueprint('class', __name__)
@@ -84,7 +85,8 @@ def new_class():
         else:
             flash("Erro ao cadastrar turma!", "danger")
 
-    return render_template('new_class.html')
+    teachers = Teacher.query.all()  # Carregar todos os professores
+    return render_template('new_class.html', teachers=teachers)
 
 @class_blueprint.route('/turma/editar/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -102,7 +104,8 @@ def edit_class(id):
         flash("Turma atualizada com sucesso!", "success")
         return redirect(url_for('class.show_class'))
 
-    return render_template('edit_class.html', class_room=class_room)
+    teachers = Teacher.query.all()  # Carregar todos os professores
+    return render_template('edit_class.html', class_room=class_room, teachers=teachers)
 
 @class_blueprint.route('/turma/deletar/<int:id>', methods=['POST'])
 @login_required

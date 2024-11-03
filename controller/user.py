@@ -59,11 +59,13 @@ def delete_user(id_user):
    return jsonify({'message': "Usuário não encontrado"}), 404
 
 @user_blueprint.route('/usuarios', methods=['GET'])
+@login_required
 def show_users():
     users = User.query.all()
     return render_template('users.html', users=users)
 
 @user_blueprint.route('/usuario/novo', methods=['GET', 'POST'])
+@login_required
 def new_user():
     if request.method == 'POST':
         name = request.form.get('name')
@@ -82,6 +84,7 @@ def new_user():
     return render_template('new_user.html')
 
 @user_blueprint.route('/usuario/editar/<int:id_user>', methods=['GET', 'POST'])
+@login_required
 def edit_user(id_user):
     user = User.query.get(id_user)
     if not user:
@@ -98,6 +101,7 @@ def edit_user(id_user):
     return render_template('edit_user.html', user=user)
 
 @user_blueprint.route('/usuario/deletar/<int:id_user>', methods=['POST'])
+@login_required
 def delete_user_html(id_user):
     user = User.query.get(id_user)
 

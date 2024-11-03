@@ -117,6 +117,7 @@ def edit_teacher(id):
     return render_template('edit_teacher.html', teacher=teacher)
 
 @teacher_blueprint.route('/professor/deletar/<int:id>', methods=['POST'])
+@login_required
 def delete_teacher_html(id):
    
    teacher = Teacher.query.get(id)
