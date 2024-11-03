@@ -84,16 +84,18 @@ def delete_student(id):
    if student:
       db.session.delete(student)
       db.session.commit()
-      return jsonify({"message": "Aluno deletdao com sucesso"})
+      return jsonify({"message": "Aluno deletdo com sucesso"})
 
    return jsonify({"message": "Aluno não encontrado"}), 404
 
 @student_blueprint.route('/alunos', methods=['GET'])
+@login_required
 def show_students():
    students = Student.query.all()
    return render_template('students.html', students=students)
 
 @student_blueprint.route('/aluno/novo', methods=['GET', 'POST'])
+@login_required
 def new_student():
    if request.method == 'POST':
       name = request.form.get('name')
@@ -120,6 +122,7 @@ def new_student():
 
 
 @student_blueprint.route('/aluno/editar/<int:id>', methods=['GET', 'POST'])
+@login_required
 def edit_student(id):
    student = Student.query.get(id)
    if not student:
@@ -142,7 +145,8 @@ def edit_student(id):
    
    return render_template('edit_student.html', student=student)
 
-@student_blueprint.route('/student/delete/<int:id>', methods=['POST'])
+@student_blueprint.route('/aluno/deletar/<int:id>', methods=['POST'])
+@login_required
 def delete_student_html(id):
    student = Student.query.get(id)
    if student:

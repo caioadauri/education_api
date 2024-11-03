@@ -1,0 +1,36 @@
+{% extends "template.html" %}
+{% block conteudo %}
+<h2>Lista de Professores</h2>
+<a href="{{ url_for('teacher.new_teacher') }}" class="btn btn-primary mb-3">Novo Professor</a>
+<a href="{{ url_for('home') }}" class="btn btn-primary">Home</a>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Idade</th>
+      <th>Matéria</th>
+      <th>Observação</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for teacher in teachers %}
+    <tr>
+      <td>{{ teacher.id }}</td>
+      <td>{{ teacher.name }}</td>
+      <td>{{ teacher.age }}</td>
+      <td>{{ teacher.matter }}</td>
+      <td>{{ teacher.obs }}</td>
+      <td>
+        <a href="{{ url_for('teacher.edit_teacher', id=teacher.id) }}" class="btn btn-warning">Editar</a>
+        <form action="{{ url_for('teacher.delete_teacher_html', id=teacher.id) }}" method="POST"
+          style="display:inline;">
+          <button type="submit" class="btn btn-danger">Deletar</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

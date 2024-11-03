@@ -69,36 +69,63 @@ def delete_teacher(id):
       db.session.commit()
       return jsonify({"message": "Professor deletdao com sucesso"})
 
-   return jsonify({"message": "Professor não encontrado"}), 404
+   return jsonify({"message": "Professor não encontrado"}), 
 
-@teacher_blueprint.route('/professor')
-def index():
-    lista_professores = Teacher.query.order_by(Teacher.id).all()
-    return render_template('teacher.html',
-                           titulo='Lista de Professores',
-                           teachers=lista_professores,)
+@teacher_blueprint.route('/professores', methods=['GET'])
+@login_required
+def show_teachers():
+    teachers = Teacher.query.all()
+    return render_template('teachers.html', teachers=teachers)
 
-@teacher_blueprint.route('/cadastro')
-def cadastro():
-    return render_template('novo.html', titulo='Cadastro')
+@teacher_blueprint.route('/professor/new', methods=['GET', 'POST'])
+@login_required
+def new_teacher():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        age = request.form.get('age')
+        matter = request.form.get('matter')
+        obs = request.form.get('obs')
 
-@teacher_blueprint.route('/criar', methods=['POST',])
-def criar():
-    tipo = request.form['tipo']
-    if tipo == 'professor':
-        name = request.form['nome']
-        age = request.form['idade']
-        matter = request.form['materia']
-        obs = request.form['observacao']
-        
-        professor = Teacher.query.filter_by(name=name).first()
+        if name:
+            teacher = Teacher(name=name, age=age, matter=matter, obs=obs)
+            db.session.add(teacher)
+            db.session.commit()
+            flash("Professor cadastrado com sucesso!", "success")
+            return redirect(url_for('teacher.show_teachers'))
+        else:
+            flash("Erro ao cadastrar professor!", "danger")
 
-        if professor:
-            flash('Este professor ja esta cadastrado.')
-            return redirect(url_for('index'))
-        
-        novo_professor = Teacher(name=name, age=age, matter=matter, obs=obs)
-        db.session.add(novo_professor)
+    return render_template('new_teacher.html')
+
+@teacher_blueprint.route('/professor/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_teacher(id):
+    teacher = Teacher.query.get(id)
+    if not teacher:
+        flash("Professor não encontrado!", "danger")
+        return redirect(url_for('teacher.show_teachers'))
+
+    if request.method == 'POST':
+        teacher.name = request.form.get('name')
+        teacher.age = request.form.get('age')
+        teacher.matter = request.form.get('matter')
+        teacher.obs = request.form.get('obs')
         db.session.commit()
-    
-    return redirect(url_for('teacher.index'))
+        flash("Professor atualizado com sucesso!", "success")
+        return redirect(url_for('teacher.show_teachers'))
+
+    return render_template('edit_teacher.html', teacher=teacher)
+
+@teacher_blueprint.route('/professor/deletar/<int:id>', methods=['POST'])
+@login_required
+def delete_teacher_html(id):
+   
+   teacher = Teacher.query.get(id)
+   if teacher:
+      db.session.delete(teacher)
+      db.session.commit()
+      flash("Professor deletado com sucesso!", "success")
+   else:
+      flash("Professor não encontrado!", "danger")
+  
+   return redirect(url_for('teacher.show_teachers'))

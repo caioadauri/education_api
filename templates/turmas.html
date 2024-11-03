@@ -1,0 +1,33 @@
+{% extends "template.html" %}
+{% block conteudo %}
+<h2>Lista de Turmas</h2>
+<a href="{{ url_for('class.new_class') }}" class="btn btn-primary mb-3">Nova Turma</a>
+<a href="{{ url_for('home') }}" class="btn btn-primary">Home</a>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Descrição</th>
+      <th>Professor</th>
+      <th>Ativo</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for class_room in class_rooms %}
+    <tr>
+      <td>{{ class_room.id }}</td>
+      <td>{{ class_room.description }}</td>
+      <td>{{ class_room.teacher.name }}</td>
+      <td>{{ "Sim" if class_room.active else "Não" }}</td>
+      <td>
+        <a href="{{ url_for('class.edit_class', id=class_room.id) }}" class="btn btn-warning">Editar</a>
+        <form action="{{ url_for('class.delete_class_html', id=class_room.id) }}" method="POST" style="display:inline;">
+          <button type="submit" class="btn btn-danger">Deletar</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "template.html" %}
+{% block conteudo %}
+<h2>Novo Professor</h2>
+<form action="{{ url_for('teacher.new_teacher') }}" method="POST">
+  <div class="form-group">
+    <label for="name">Nome:</label>
+    <input type="text" id="name" name="name" class="form-control" required>
+  </div>
+  <div class="form-group">
+    <label for="age">Idade:</label>
+    <input type="text" id="age" name="age" class="form-control" required>
+  </div>
+  <div class="form-group">
+    <label for="matter">Matéria:</label>
+    <input type="text" id="matter" name="matter" class="form-control" required>
+  </div>
+  <div class="form-group">
+    <label for="obs">Observação:</label>
+    <input type="text" id="obs" name="obs" class="form-control">
+  </div>
+  <button type="submit" class="btn btn-primary">Cadastrar Professor</button>
+</form>
+{% endblock %}
